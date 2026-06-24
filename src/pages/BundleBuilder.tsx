@@ -3,24 +3,33 @@ import Checkout from "../components/Checkout";
 import ProductsArea from "../components/ProductsArea";
 import type { ProductCardData } from "../components/ProductCard";
 import products from "../data/data.json";
+import {
+  getReviewLines,
+  initVariantQuantities,
+  mergeSavedItem,
+} from "../utils/productHelpers";
 
 const STORAGE_KEY = "bundle-builder-saved";
 
 function getInitialItems(): ProductCardData[] {
-  if (typeof window === "undefined") return products as ProductCardData[];
+  const catalog = (products as ProductCardData[]).map((item) =>
+    initVariantQuantities(item),
+  );
+
+  if (typeof window === "undefined") return catalog;
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved) as ProductCardData[];
-      return (products as ProductCardData[]).map((base) => {
+      return catalog.map((base) => {
         const match = parsed.find((s) => s.id === base.id);
-        return match ? { ...base, quantity: match.quantity, selectedColor: match.selectedColor } : base;
+        return match ? mergeSavedItem(base, match) : base;
       });
     }
   } catch {
     // ignore
   }
-  return products as ProductCardData[];
+  return catalog;
 }
 
 export default function BundleBuilder() {
@@ -32,17 +41,48 @@ export default function BundleBuilder() {
     type: "success",
   });
 
-  const handleQuantityChange = (id: string, quantity: number) => {
+  const handleQuantityChange = (
+    id: string,
+    quantity: number,
+    color?: string | null,
+  ) => {
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+      prev.map((item) => {
+        if (item.id !== id) return item;
+
+        if (item.colorOptions.length > 0) {
+          const activeColor =
+            color ?? item.selectedColor ?? item.colorOptions[0]?.label;
+          if (!activeColor) return item;
+
+          const variantQuantities = {
+            ...(item.variantQuantities ?? {}),
+            [activeColor]: quantity,
+          };
+
+          return {
+            ...item,
+            variantQuantities,
+            selectedColor: activeColor,
+            quantity: variantQuantities[activeColor] ?? 0,
+          };
+        }
+
+        return { ...item, quantity };
+      }),
     );
   };
 
   const handleColorChange = (id: string, color: string) => {
     setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, selectedColor: color } : item
-      )
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        return {
+          ...item,
+          selectedColor: color,
+          quantity: item.variantQuantities?.[color] ?? 0,
+        };
+      }),
     );
   };
 
@@ -66,8 +106,8 @@ export default function BundleBuilder() {
   };
 
   const handleCheckout = () => {
-    const selected = items.filter((i) => i.quantity > 0);
-    if (selected.length === 0) {
+    const reviewLines = getReviewLines(items);
+    if (reviewLines.length === 0) {
       setModal({
         isOpen: true,
         title: "Empty Cart",
@@ -77,11 +117,17 @@ export default function BundleBuilder() {
       return;
     }
 
-    const itemsSummary = selected
-      .map((i) => `• ${i.name} (${i.selectedColor || "Default"}) × ${i.quantity} — $${(i.salePrice * i.quantity).toFixed(2)}`)
+    const itemsSummary = reviewLines
+      .map((line) => {
+        const label = line.color ? `${line.name} (${line.color})` : line.name;
+        return `• ${label} × ${line.quantity} — $${(line.salePrice * line.quantity).toFixed(2)}`;
+      })
       .join("\n");
 
-    const totalCost = selected.reduce((sum, item) => sum + item.salePrice * item.quantity, 0);
+    const totalCost = reviewLines.reduce(
+      (sum, line) => sum + line.salePrice * line.quantity,
+      0,
+    );
 
     setModal({
       isOpen: true,
@@ -91,7 +137,7 @@ export default function BundleBuilder() {
     });
   };
 
-  const selectedItems = items.filter((i) => i.quantity > 0);
+  const reviewLines = getReviewLines(items);
 
   return (
     <main className="mx-auto container max-w-[1400px] p-4 md:p-6 lg:p-6">
@@ -106,7 +152,7 @@ export default function BundleBuilder() {
         </section>
 
         <Checkout
-          selectedItems={selectedItems}
+          reviewLines={reviewLines}
           onCheckout={handleCheckout}
           onSave={handleSave}
           onQuantityChange={handleQuantityChange}

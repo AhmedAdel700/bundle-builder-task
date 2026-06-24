@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import type { ProductCardData } from "./ProductCard";
 import ProductCard from "./ProductCard";
+import { countSelectedProducts } from "../utils/productHelpers";
 import livestream from "../../public/assets/livestream.svg";
 import shield from "../../public/assets/shield.svg";
 import remote from "../../public/assets/remote.svg";
@@ -185,7 +186,7 @@ function PlaceholderContent({ label }: { label: string }) {
 
 interface ProductsAreaProps {
   items: ProductCardData[];
-  onQuantityChange: (id: string, quantity: number) => void;
+  onQuantityChange: (id: string, quantity: number, color?: string | null) => void;
   onColorChange: (id: string, color: string) => void;
 }
 
@@ -196,7 +197,7 @@ export default function ProductsArea({
 }: ProductsAreaProps) {
   const [openStep, setOpenStep] = useState<number>(1);
 
-  const selectedCameraCount = items.filter((i) => i.quantity > 0).length;
+  const selectedCameraCount = countSelectedProducts(items);
 
   const steps: AccordionStep[] = [
     {

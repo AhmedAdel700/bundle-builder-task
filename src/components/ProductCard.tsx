@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getActiveQuantity, getTotalQuantity } from "../utils/productHelpers";
 
 export interface ColorOption {
   label: string;
@@ -17,11 +18,12 @@ export interface ProductCardData {
   quantity: number;
   colorOptions: ColorOption[];
   selectedColor: string | null;
+  variantQuantities?: Record<string, number>;
 }
 
 interface ProductCardProps {
   data: ProductCardData;
-  onQuantityChange?: (id: string, quantity: number) => void;
+  onQuantityChange?: (id: string, quantity: number, color?: string | null) => void;
   onColorChange?: (id: string, color: string) => void;
   className?: string;
 }
@@ -42,25 +44,35 @@ export default function ProductCard({
     return data.image;
   };
 
-  const [quantity, setQuantity] = useState(data.quantity);
-  const [selected, setSelected] = useState(data.quantity > 0);
-  const isSelected = selected || quantity > 0;
+  const [quantity, setQuantity] = useState(() => getActiveQuantity(data));
+  const [selected, setSelected] = useState(() => getTotalQuantity(data) > 0);
+  const isSelected = selected || getTotalQuantity(data) > 0;
   const [selectedColor, setSelectedColor] = useState(data.selectedColor);
   const [currentImage, setCurrentImage] = useState(getCurrentImageUrl);
-  const [prevQuantity, setPrevQuantity] = useState(data.quantity);
+  const [prevQuantity, setPrevQuantity] = useState(() => getActiveQuantity(data));
+  const [prevTotalQuantity, setPrevTotalQuantity] = useState(() =>
+    getTotalQuantity(data),
+  );
   const [prevSelectedColor, setPrevSelectedColor] = useState(
     data.selectedColor,
   );
   const [prevImage, setPrevImage] = useState(data.image);
 
-  if (prevQuantity !== data.quantity) {
-    setPrevQuantity(data.quantity);
-    setQuantity(data.quantity);
-    setSelected(data.quantity > 0);
+  const activeQuantity = getActiveQuantity(data);
+  const totalQuantity = getTotalQuantity(data);
+
+  if (prevQuantity !== activeQuantity) {
+    setPrevQuantity(activeQuantity);
+    setQuantity(activeQuantity);
+  }
+  if (prevTotalQuantity !== totalQuantity) {
+    setPrevTotalQuantity(totalQuantity);
+    setSelected(totalQuantity > 0);
   }
   if (prevSelectedColor !== data.selectedColor) {
     setPrevSelectedColor(data.selectedColor);
     setSelectedColor(data.selectedColor);
+    setQuantity(activeQuantity);
     const match = data.colorOptions.find(
       (opt) => opt.label === data.selectedColor,
     );
@@ -78,27 +90,29 @@ export default function ProductCard({
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation();
     const next = Math.max(0, quantity - 1);
-    if (next === 0) setSelected(false);
+    if (next === 0 && totalQuantity - quantity === 0) setSelected(false);
     setQuantity(next);
-    onQuantityChange?.(data.id, next);
+    onQuantityChange?.(data.id, next, selectedColor);
   };
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation();
     const next = quantity + 1;
     if (!selected) setSelected(true);
     setQuantity(next);
-    onQuantityChange?.(data.id, next);
+    onQuantityChange?.(data.id, next, selectedColor);
   };
   const handleCardClick = () => {
-    if (!isSelected) {
+    if (totalQuantity === 0 && quantity === 0) {
       setSelected(true);
       setQuantity(1);
-      onQuantityChange?.(data.id, 1);
+      onQuantityChange?.(data.id, 1, selectedColor);
     }
   };
-  const handleColorSelect = (option: ColorOption) => {
+  const handleColorSelect = (option: ColorOption, e: React.MouseEvent) => {
+    e.stopPropagation();
     setSelectedColor(option.label);
     setCurrentImage(option.image);
+    setQuantity(data.variantQuantities?.[option.label] ?? 0);
     onColorChange?.(data.id, option.label);
   };
   const hasColors = data.colorOptions.length > 0;
@@ -152,7 +166,7 @@ export default function ProductCard({
               return (
                 <button
                   key={option.label}
-                  onClick={() => handleColorSelect(option)}
+                  onClick={(e) => handleColorSelect(option, e)}
                   className={`flex items-center gap-0.5 rounded-[2px] border-[0.5px] px-[5px] py-px text-xs font-medium transition-colors duration-300 ${
                     isColorSelected
                       ? "border-accent-teal bg-accent-teal-light text-(--color-text-secondary)"

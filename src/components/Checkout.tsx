@@ -3,32 +3,37 @@ import SectionLabel from "./SectionLabel";
 import ProductItem from "./ProductItem";
 import Badge from "../assets/Badge.svg";
 import Truck from "../assets/delivery.svg";
-import type { ProductCardData } from "./ProductCard";
+import type { ReviewLineItem } from "../utils/productHelpers";
 
 interface CheckoutProps {
-  selectedItems: ProductCardData[];
+  reviewLines: ReviewLineItem[];
   onCheckout: () => void;
   onSave: () => void;
-  onQuantityChange: (id: string, quantity: number) => void;
+  onQuantityChange: (
+    id: string,
+    quantity: number,
+    color?: string | null,
+  ) => void;
 }
 
 export default function Checkout({
-  selectedItems,
+  reviewLines,
   onCheckout,
   onSave,
   onQuantityChange,
 }: CheckoutProps) {
-  const originalTotal = selectedItems.reduce(
-    (sum, item) => sum + (item.originalPrice ?? item.salePrice) * item.quantity,
+  const originalTotal = reviewLines.reduce(
+    (sum, line) =>
+      sum + (line.originalPrice ?? line.salePrice) * line.quantity,
     0,
   );
-  const saleTotal = selectedItems.reduce(
-    (sum, item) => sum + item.salePrice * item.quantity,
+  const saleTotal = reviewLines.reduce(
+    (sum, line) => sum + line.salePrice * line.quantity,
     0,
   );
   const savings = originalTotal - saleTotal;
 
-  const hasItems = selectedItems.length > 0;
+  const hasItems = reviewLines.length > 0;
 
   return (
     <aside className="lg:col-span-1">
@@ -36,42 +41,40 @@ export default function Checkout({
         <ReviewHeader />
 
         <div className="border-t border-border-subtle flex flex-col">
-          {selectedItems.length > 0 && (
+          {reviewLines.length > 0 && (
             <>
               <SectionLabel label="Cameras" />
               <div className="divide-y divide-(--color-border-subtle)">
-                {selectedItems.map((item) => {
-                  const matchedColorOption = item.colorOptions?.find(
-                    (opt) => opt.label === item.selectedColor,
-                  );
-                  const displayImage = matchedColorOption
-                    ? matchedColorOption.image
-                    : item.image;
-
-                  return (
-                    <ProductItem
-                      key={item.id}
-                      name={`${item.name}${item.selectedColor ? ` (${item.selectedColor})` : ""}`}
-                      quantity={item.quantity}
-                      image={displayImage}
-                      originalPrice={
-                        item.originalPrice !== null
-                          ? `$${(item.originalPrice * item.quantity).toFixed(2)}`
-                          : undefined
-                      }
-                      discountedPrice={`$${(item.salePrice * item.quantity).toFixed(2)}`}
-                      onIncrement={() =>
-                        onQuantityChange(item.id, item.quantity + 1)
-                      }
-                      onDecrement={() =>
-                        onQuantityChange(
-                          item.id,
-                          Math.max(0, item.quantity - 1),
-                        )
-                      }
-                    />
-                  );
-                })}
+                {reviewLines.map((line) => (
+                  <ProductItem
+                    key={line.lineId}
+                    name={
+                      line.color ? `${line.name} (${line.color})` : line.name
+                    }
+                    quantity={line.quantity}
+                    image={line.image}
+                    originalPrice={
+                      line.originalPrice !== null
+                        ? `$${(line.originalPrice * line.quantity).toFixed(2)}`
+                        : undefined
+                    }
+                    discountedPrice={`$${(line.salePrice * line.quantity).toFixed(2)}`}
+                    onIncrement={() =>
+                      onQuantityChange(
+                        line.productId,
+                        line.quantity + 1,
+                        line.color,
+                      )
+                    }
+                    onDecrement={() =>
+                      onQuantityChange(
+                        line.productId,
+                        Math.max(0, line.quantity - 1),
+                        line.color,
+                      )
+                    }
+                  />
+                ))}
               </div>
             </>
           )}
