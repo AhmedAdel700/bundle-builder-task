@@ -3,94 +3,18 @@
 import React, { useState } from "react";
 import type { ProductCardData } from "./ProductCard";
 import ProductCard from "./ProductCard";
-
-function CameraIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M23 7l-7 5 7 5V7z" />
-      <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-    </svg>
-  );
-}
-
-function PlanIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-  );
-}
-
-function SensorIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="2" y="3" width="20" height="14" rx="2" />
-      <line x1="8" y1="21" x2="16" y2="21" />
-      <line x1="12" y1="17" x2="12" y2="21" />
-    </svg>
-  );
-}
-
-function ExtraIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="3" />
-      <circle cx="12" cy="12" r="8" />
-      <line x1="12" y1="2" x2="12" y2="4" />
-      <line x1="12" y1="20" x2="12" y2="22" />
-      <line x1="2" y1="12" x2="4" y2="12" />
-      <line x1="20" y1="12" x2="22" y2="12" />
-    </svg>
-  );
-}
+import livestream from "../../public/assets/livestream.svg";
+import shield from "../../public/assets/shield.svg";
+import remote from "../../public/assets/remote.svg";
+import protection from "../../public/assets/protection.svg";
 
 function AccordionArrow({ open }: { open: boolean }) {
   return (
     <span
-      style={{
-        fontSize: 10,
-        color: "#4E2FD2",
-        display: "inline-block",
-        transition: "transform 0.3s ease",
-        transform: open ? "rotate(0deg)" : "rotate(180deg)",
-        lineHeight: 1,
-      }}
+      className={`text-sm -mt-2 inline-block transition-transform duration-300 leading-none ${
+        open ? "rotate-0" : "rotate-180"
+      }`}
+      style={{ color: "var(--color-primary)" }}
     >
       ▲
     </span>
@@ -118,115 +42,75 @@ function AccordionItem({
   totalSteps: number;
 }) {
   return (
-    <div style={{ marginBottom: isOpen ? 8 : 0 }}>
-      {/* Step label — always outside, full width, no padding effect */}
-      <div
-        style={{
-          borderTop: "1px solid #1F1F1F",
-          paddingTop: 8,
-          paddingBottom: 4,
-        }}
-      >
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 500,
-            color: "#8A94A6",
-            letterSpacing: "0.03em",
-            textTransform: "uppercase",
-          }}
-        >
-          STEP {step.id} OF {totalSteps}
-        </span>
-      </div>
+    <div className="mb-6">
+      {step.id !== 1 && (
+        <>
+          <span 
+            className="text-xs font-medium tracking-wider uppercase"
+            style={{ color: "var(--color-gray-600)" }}
+          >
+            STEP {step.id} OF {totalSteps}
+          </span>
+          <div 
+            className="border-t-[0.5px] pt-2 pb-1"
+            style={{ borderColor: "var(--color-border-dark)" }}
+          ></div>
+        </>
+      )}
 
-      {/* Accordion body — bordered box when open, plain when closed */}
       <div
+        className={`transition-all duration-300 ${
+          isOpen
+            ? "rounded-[10px] pt-3"
+            : "py-4"
+        }`}
         style={{
-          backgroundColor: isOpen ? "#EDF4FF" : "transparent",
-          border: isOpen ? "1px solid #4E2FD2" : "none",
-          borderRadius: isOpen ? 10 : 0,
-          padding: isOpen ? "12px 16px 16px 16px" : "0 0 10px 0",
-          transition:
-            "background-color 0.3s ease, border 0.2s ease, border-radius 0.3s ease, padding 0.3s ease",
+          backgroundColor: isOpen ? "var(--color-bg-light)" : "transparent",
+          borderBottom: !isOpen ? "1px solid var(--color-border-dark)" : "none",
         }}
       >
-        {/* Header row */}
+        {step.id === 1 && (
+          <>
+            <span 
+              className="text-xs font-medium tracking-wider uppercase p-4"
+              style={{ color: "var(--color-gray-600)" }}
+            >
+              STEP {step.id} OF {totalSteps}
+            </span>
+            <div 
+              className="border-t-[0.5px] pt-2 pb-1 mt-2"
+              style={{ borderColor: "var(--color-border-transparent)" }}
+            ></div>
+          </>
+        )}
         <button
           onClick={onToggle}
-          className="w-full flex items-center gap-3 text-left"
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-          }}
+          className="w-full flex items-center gap-3 text-left bg-none border-none px-4 my-2"
         >
-          {/* Icon */}
-          <span
-            style={{
-              color: isOpen ? "#4E2FD2" : "#8A94A6",
-              flexShrink: 0,
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {step.icon}
-          </span>
+          <span className={`shrink-0`}>{step.icon}</span>
 
-          {/* Title */}
           <span
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-              color: isOpen ? "#1F1F1F" : "#6B7280",
-              flex: 1,
-              lineHeight: 1.2,
-              display: "flex",
-              alignItems: "center",
-            }}
+            className={`flex-1 font-semibold text-[22px] leading-[120%]`}
+            style={{ color: "var(--color-text-primary)" }}
           >
             {step.title}
           </span>
 
-          {/* Selected badge + Arrow */}
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              flexShrink: 0,
-            }}
-          >
+          <span className="shrink-0 inline-flex gap-1.5">
             {(step.selectedCount ?? 0) > 0 && (
-              <span
-                style={{
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "#4E2FD2",
-                  display: "inline-flex",
-                  alignItems: "center",
-                }}
+              <span 
+                className="font-medium text-xs"
+                style={{ color: "var(--color-primary)" }}
               >
                 {step.selectedCount} selected
               </span>
             )}
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: 20,
-              }}
-            >
+            <span className="inline-flex items-center justify-center h-5">
               <AccordionArrow open={isOpen} />
             </span>
           </span>
         </button>
 
-        {/* Collapsible content */}
         <div
           style={{
             overflow: "hidden",
@@ -234,7 +118,7 @@ function AccordionItem({
             transition: "max-height 0.4s ease",
           }}
         >
-          <div style={{ paddingTop: 16, paddingBottom: 8 }}>{step.content}</div>
+          <div className={step.id === 1 ? "pt-4 pb-2" : "pt-4 pb-2 px-4"}>{step.content}</div>
         </div>
       </div>
     </div>
@@ -253,7 +137,7 @@ function CamerasContent({
   return (
     <div>
       {/* Cards grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 justify-center">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 justify-center px-4">
         {items.map((product, index) => (
           <ProductCard
             key={product.id}
@@ -269,28 +153,19 @@ function CamerasContent({
         ))}
       </div>
 
-      {/* Next button */}
-      <div className="flex justify-center mt-6">
-        <button
+      <div className="flex justify-center mt-6 mb-4">
+        <button 
+          className="w-full lg:w-[242px] h-[39px] px-6 py-1.25 font-semibold rounded-[7px] transition-colors duration-300 hover:text-white"
           style={{
-            background: "transparent",
-            border: "2px solid #4E2FD2",
-            color: "#4E2FD2",
-            borderRadius: 8,
-            padding: "12px 32px",
-            fontSize: 15,
-            fontWeight: 600,
-            cursor: "pointer",
-            transition: "background 0.2s, color 0.2s",
+            borderColor: "var(--color-primary)",
+            color: "var(--color-primary)",
+            borderWidth: "1px",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "#4E2FD2";
-            (e.currentTarget as HTMLButtonElement).style.color = "#fff";
+            e.currentTarget.style.backgroundColor = "var(--color-primary)";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "transparent";
-            (e.currentTarget as HTMLButtonElement).style.color = "#4E2FD2";
+            e.currentTarget.style.backgroundColor = "transparent";
           }}
         >
           Next: Choose your plan
@@ -302,7 +177,7 @@ function CamerasContent({
 
 function PlaceholderContent({ label }: { label: string }) {
   return (
-    <div style={{ color: "#8A94A6", fontSize: 14, padding: "8px 0" }}>
+    <div className="text-sm py-2" style={{ color: "var(--color-text-light)" }}>
       {label} options coming soon.
     </div>
   );
@@ -327,7 +202,7 @@ export default function ProductsArea({
     {
       id: 1,
       title: "Choose your cameras",
-      icon: <CameraIcon size={22} />,
+      icon: <img src={livestream} className="w-[28px] h-[28px] object-cover" />,
       selectedCount: selectedCameraCount,
       content: (
         <CamerasContent
@@ -340,21 +215,21 @@ export default function ProductsArea({
     {
       id: 2,
       title: "Choose your plan",
-      icon: <PlanIcon size={22} />,
+      icon: <img src={shield} className="w-[28px] h-[28px] object-cover" />,
       selectedCount: 0,
       content: <PlaceholderContent label="Plan" />,
     },
     {
       id: 3,
       title: "Choose your sensors",
-      icon: <SensorIcon size={22} />,
+      icon: <img src={remote} className="w-[28px] h-[28px] object-cover" />,
       selectedCount: 0,
       content: <PlaceholderContent label="Sensor" />,
     },
     {
       id: 4,
       title: "Add extra protection",
-      icon: <ExtraIcon size={22} />,
+      icon: <img src={protection} className="w-[28px] h-[28px] object-cover" />,
       selectedCount: 0,
       content: <PlaceholderContent label="Extra protection" />,
     },

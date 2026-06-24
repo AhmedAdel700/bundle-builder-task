@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+
 export interface ColorOption {
   label: string;
   image: string;
 }
+
 export interface ProductCardData {
   id: string;
   name: string;
@@ -16,6 +18,7 @@ export interface ProductCardData {
   colorOptions: ColorOption[];
   selectedColor: string | null;
 }
+
 interface ProductCardProps {
   data: ProductCardData;
   onQuantityChange?: (id: string, quantity: number) => void;
@@ -100,24 +103,24 @@ export default function ProductCard({
   };
   const hasColors = data.colorOptions.length > 0;
   const hasDiscount = data.discount !== null && data.originalPrice !== null;
+
   return (
     <div
-      className={`relative flex items-center gap-[19px] rounded-[10px] bg-white p-3 w-full cursor-pointer ${className}`}
-      style={
-        isSelected
-          ? { border: "2px solid #4E2FD2B2" }
-          : { border: "2px solid transparent" }
-      }
+      className={`relative flex items-center gap-[19px] rounded-[10px] bg-white p-3 w-full cursor-pointer transition-all duration-200 ${className}`}
+      style={{
+        borderWidth: "2px",
+        borderColor: isSelected
+          ? "var(--color-primary-semi)"
+          : "transparent",
+      }}
       onClick={handleCardClick}
     >
       {hasDiscount && (
-        <div
-          className="absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-semibold text-white"
-          style={{ backgroundColor: "#4E2FD2" }}
-        >
+        <div className="absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-semibold text-white bg-primary">
           Save {data.discount}%
         </div>
       )}
+
       <div className="shrink-0 flex items-center justify-center w-[101px] h-[101px]">
         <img
           src={currentImage}
@@ -125,21 +128,23 @@ export default function ProductCard({
           className="w-full h-full object-cover"
         />
       </div>
+
       <div className="flex flex-col gap-[10px] flex-1 min-w-0 pt-1">
         <div className="flex flex-col">
-          <h3 className="text-base font-semibold text-[#1F1F1F] leading-tight">
+          <h3 className="text-base font-semibold text-(--color-text-secondary) leading-tight">
             {data.name}
           </h3>
-          <p className="text-xs text-[#1F1F1FBF] font-medium mt-2 leading-snug">
+          <p className="text-xs text-text-tertiary font-medium mt-2 leading-snug">
             {data.description}
           </p>
           <a
             href={data.learnMoreUrl}
-            className="text-xs font-medium text-[#0000EE] underline w-fit hover:text-[#0000EE]/80"
+            className="text-xs font-medium text-link-blue underline w-fit hover:opacity-80 transition-opacity"
           >
             Learn More
           </a>
         </div>
+
         {hasColors && (
           <div className="flex gap-2 flex-wrap">
             {data.colorOptions.map((option) => {
@@ -150,8 +155,8 @@ export default function ProductCard({
                   onClick={() => handleColorSelect(option)}
                   className={`flex items-center gap-0.5 rounded-[2px] border-[0.5px] px-[5px] py-px text-xs font-medium transition-colors duration-300 ${
                     isColorSelected
-                      ? "border-[#0AA288] bg-[#1DF0BB0A] text-[#1F1F1F]"
-                      : "border-[#CCCCCC] bg-white text-[#1F1F1F] hover:border-[#0AA288]"
+                      ? "border-accent-teal bg-accent-teal-light text-(--color-text-secondary)"
+                      : "border-border-light bg-white text-(--color-text-secondary) hover:border-accent-teal"
                   }`}
                 >
                   <img
@@ -165,64 +170,40 @@ export default function ProductCard({
             })}
           </div>
         )}
+
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <button
               onClick={handleDecrement}
               disabled={quantity === 0}
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 4,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: quantity === 0 ? "2px solid #E6EBF0" : "none",
-                background: quantity === 0 ? "transparent" : "#F0F4F7",
-                color: quantity === 0 ? "#E6EBF0" : "#525963",
-                cursor: quantity === 0 ? "not-allowed" : "pointer",
-                fontSize: 16,
-                lineHeight: 1,
-                flexShrink: 0,
-                padding: 0,
-              }}
+              className={`w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors duration-200 text-base leading-none ${
+                quantity === 0
+                  ? "border-2 border-(--color-gray-400) bg-transparent text-(--color-gray-400) cursor-not-allowed"
+                  : "border-none bg-bg-input text-gray-500 cursor-pointer"
+              }`}
               aria-label="Decrease quantity"
             >
               −
             </button>
-            <span className="w-5 text-center text-[14px] font-semibold text-gray-900">
+            <span className="w-5 text-center text-[14px] font-semibold text-text-primary">
               {quantity}
             </span>
             <button
               onClick={handleIncrement}
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 4,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "none",
-                background: "#F0F4F7",
-                color: "#525963",
-                cursor: "pointer",
-                fontSize: 16,
-                lineHeight: 1,
-                flexShrink: 0,
-                padding: 0,
-              }}
+              className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors duration-200 text-base leading-none border-none bg-bg-input text-gray-500 cursor-pointer"
               aria-label="Increase quantity"
             >
               +
             </button>
           </div>
+
           <div className="flex flex-col items-end">
             {hasDiscount && data.originalPrice !== null && (
-              <span className="text-base text-[#D8392B] font-normal line-through leading-tight">
+              <span className="text-base text-accent-red font-normal line-through leading-tight">
                 ${data.originalPrice.toFixed(2)}
               </span>
             )}
-            <span className="text-base font-normal text-[#575757] leading-tight">
+            <span className="text-base font-normal text-text-muted leading-tight">
               ${data.salePrice.toFixed(2)}
             </span>
           </div>

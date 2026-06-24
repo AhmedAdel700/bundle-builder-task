@@ -24,6 +24,32 @@
   font-display: swap;
 }
 
+@theme {
+  --color-primary: #4E2FD2;
+  --color-primary-semi: #4E2FD2B2;
+  --color-text-primary: #0B0D10;
+  --color-text-secondary: #1F1F1F;
+  --color-text-tertiary: #1F1F1FBF;
+  --color-text-muted: #575757;
+  --color-text-light: #6F7882;
+  --color-border-dark: #1F1F1F;
+  --color-border-light: #CCCCCC;
+  --color-border-subtle: #E6EBF0;
+  --color-border-transparent: #1f1f1f81;
+  --color-bg-light: #EDF4FF;
+  --color-bg-input: #F0F4F7;
+  --color-bg-hover: #e6edf5;
+  --color-accent-teal: #0AA288;
+  --color-accent-teal-light: #1DF0BB0A;
+  --color-accent-teal-bright: #1DF0BB;
+  --color-accent-red: #D8392B;
+  --color-link-blue: #0000EE;
+  --color-white: #FFFFFF;
+  --color-gray-400: #E6EBF0;
+  --color-gray-500: #525963;
+  --color-gray-600: #484848;
+}
+
 body {
   font-family: 'Gilroy', sans-serif;
 }

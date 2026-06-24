@@ -31,35 +31,35 @@ export default function ProductItem({
         />
       </div>
 
-      <span className="flex-1 text-sm text-[#0B0D10] font-medium leading-[130%]">
+      <span className="flex-1 text-sm text-text-primary font-medium leading-[130%]">
         {name}
       </span>
 
       <div className="flex items-center gap-2">
         <button
           onClick={onDecrement}
-          className="w-5 h-5 bg-white rounded-sm flex items-center justify-center hover:bg-[#e6edf5] duration-300 tracking-colors"
+          className="w-5 h-5 bg-white rounded-sm flex items-center justify-center hhover:bg-bg-hover duration-300 transition-colors"
         >
-          <Minus size={12} stroke-width={3} color="#575757" />
+          <Minus size={12} stroke-width={3} color="var(--color-text-muted)" />
         </button>
-        <span className="text-sm text-[#1F1F1F] w-3 font-semibold text-center">
+        <span className="text-sm text-(--color-text-secondary) w-3 font-semibold text-center">
           {quantity}
         </span>
         <button
           onClick={onIncrement}
-          className="w-5 h-5 bg-white rounded-sm flex items-center justify-center hover:bg-[#e6edf5] duration-300 tracking-colors"
+          className="w-5 h-5 bg-white rounded-sm flex items-center justify-center hhover:bg-bg-hover duration-300 transition-colors"
         >
-          <Plus size={12} stroke-width={3} color="#575757" />
+          <Plus size={12} stroke-width={3} color="var(--color-text-muted)" />
         </button>
       </div>
 
       <div className="text-right ml-2 min-w-[56px]">
         {originalPrice && (
-          <p className="text-sm text-[#6F7882] line-through font-medium leading-none mb-0.5">
+          <p className="text-sm text-text-light line-through font-medium leading-none mb-0.5">
             {originalPrice}
           </p>
         )}
-        <p className={`text-sm font-semibold leading-none text-[#4E2FD2]`}>
+        <p className="text-sm font-semibold leading-none text-primary">
           {isFree ? "FREE" : discountedPrice}
         </p>
       </div>

@@ -115,11 +115,11 @@ export default function BundleBuilder() {
 
       {modal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full border border-gray-100 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full border border-(--color-gray-400) overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
                 {modal.type === "success" ? (
-                  <div className="w-10 h-10 rounded-full bg-[#1DF0BB1A] flex items-center justify-center text-[#0AA288] font-bold text-xl">
+                  <div className="w-10 h-10 rounded-full bg-accent-teal-light flex items-center justify-center text-accent-teal font-bold text-xl">
                     ✓
                   </div>
                 ) : (
@@ -127,15 +127,15 @@ export default function BundleBuilder() {
                     i
                   </div>
                 )}
-                <h3 className="text-xl font-bold text-[#1F1F1F]">{modal.title}</h3>
+                <h3 className="text-xl font-bold text-(--color-text-secondary)">{modal.title}</h3>
               </div>
-              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-line mb-6">
+              <div className="text-sm text-text-muted leading-relaxed whitespace-pre-line mb-6">
                 {modal.message}
               </div>
               <div className="flex justify-end">
                 <button
                   onClick={() => setModal((prev) => ({ ...prev, isOpen: false }))}
-                  className="bg-[#4E2FD2] hover:bg-[#3614c0] text-white px-5 py-2 rounded-lg font-medium text-sm transition-all shadow-md active:scale-95"
+                  className="bg-primary hover:brightness-90 text-white px-5 py-2 rounded-lg font-medium text-sm transition-all shadow-md active:scale-95"
                 >
                   Dismiss
                 </button>
