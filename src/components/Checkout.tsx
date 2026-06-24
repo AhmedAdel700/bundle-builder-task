@@ -2,6 +2,7 @@ import ReviewHeader from "./ReviewHeader";
 import SectionLabel from "./SectionLabel";
 import ProductItem from "./ProductItem";
 import Badge from "../assets/Badge.svg";
+import Truck from "../assets/delivery.svg";
 import type { ProductCardData } from "./ProductCard";
 
 interface CheckoutProps {
@@ -19,11 +20,11 @@ export default function Checkout({
 }: CheckoutProps) {
   const originalTotal = selectedItems.reduce(
     (sum, item) => sum + (item.originalPrice ?? item.salePrice) * item.quantity,
-    0
+    0,
   );
   const saleTotal = selectedItems.reduce(
     (sum, item) => sum + item.salePrice * item.quantity,
-    0
+    0,
   );
   const savings = originalTotal - saleTotal;
 
@@ -41,9 +42,11 @@ export default function Checkout({
               <div className="divide-y divide-(--color-border-subtle)">
                 {selectedItems.map((item) => {
                   const matchedColorOption = item.colorOptions?.find(
-                    (opt) => opt.label === item.selectedColor
+                    (opt) => opt.label === item.selectedColor,
                   );
-                  const displayImage = matchedColorOption ? matchedColorOption.image : item.image;
+                  const displayImage = matchedColorOption
+                    ? matchedColorOption.image
+                    : item.image;
 
                   return (
                     <ProductItem
@@ -57,8 +60,15 @@ export default function Checkout({
                           : undefined
                       }
                       discountedPrice={`$${(item.salePrice * item.quantity).toFixed(2)}`}
-                      onIncrement={() => onQuantityChange(item.id, item.quantity + 1)}
-                      onDecrement={() => onQuantityChange(item.id, Math.max(0, item.quantity - 1))}
+                      onIncrement={() =>
+                        onQuantityChange(item.id, item.quantity + 1)
+                      }
+                      onDecrement={() =>
+                        onQuantityChange(
+                          item.id,
+                          Math.max(0, item.quantity - 1),
+                        )
+                      }
                     />
                   );
                 })}
@@ -66,7 +76,20 @@ export default function Checkout({
             </>
           )}
 
-          {/* TOTALS */}
+          <div className="flex justify-between items-center pt-3 border-t my-2 border-[#CED6DE]">
+            <div className="flex items-center gap-3">
+              <div className="w-[41px] h-[41px] rounded-[5px] bg-white flex flex-col justify-center items-center shrink-0">
+                <img src={Truck} className="w-[29px] h-[29px] object-contain" />
+              </div>
+              <h5 className="text-text-secondary text-sm font-medium">Fast Shipping</h5>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-text-light text-sm font-medium line-through">$5.99</span>
+              <span className="text-primary text-sm font-semibold">FREE</span>
+            </div>
+          </div>
+
           <div className="flex justify-between items-center mt-2">
             <div className="h-[78px] w-[78px]">
               <img
@@ -99,7 +122,8 @@ export default function Checkout({
           <div className="flex flex-col gap-1 pt-2">
             {hasItems && savings > 0 && (
               <p className="text-accent-teal text-xs font-semibold text-center">
-                Congrats! You're saving ${savings.toFixed(2)} on your security bundle!
+                Congrats! You're saving ${savings.toFixed(2)} on your security
+                bundle!
               </p>
             )}
 
