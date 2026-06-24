@@ -2,41 +2,10 @@ import ReviewHeader from "./ReviewHeader";
 import SectionLabel from "./SectionLabel";
 import ProductItem from "./ProductItem";
 import PlanItem from "./PlanItem";
-
-const ShieldIcon = () => (
-  <div className="w-10 h-10 bg-[#3B6AE8] rounded-md flex items-center justify-center">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <path
-        d="M10 2L3 6v5c0 4 3.1 7.7 7 8.9C13.9 18.7 17 15 17 11V6L10 2z"
-        fill="white"
-        opacity="0.9"
-      />
-    </svg>
-  </div>
-);
-
-const TruckIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <rect
-      x="1"
-      y="7"
-      width="12"
-      height="8"
-      rx="1"
-      stroke="#3B6AE8"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <path
-      d="M13 9h3l3 3v3h-6V9z"
-      stroke="#3B6AE8"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <circle cx="5" cy="16" r="1.5" fill="#3B6AE8" />
-    <circle cx="15" cy="16" r="1.5" fill="#3B6AE8" />
-  </svg>
-);
+import TruckIcon from "../assets/delivery.svg";
+import Unlimited from "../assets/unlimited.svg";
+import product1 from "../assets/WyzeCamv4-white.svg";
+import Badge from "../assets/Badge.svg";
 
 export default function Checkout() {
   return (
@@ -53,6 +22,7 @@ export default function Checkout() {
               quantity={1}
               originalPrice="$35.98"
               discountedPrice="$27.98"
+              image={product1}
             />
             <ProductItem
               name="Wyze Cam Pan v3"
@@ -97,29 +67,67 @@ export default function Checkout() {
           <div className="border-t border-[#CED6DE]">
             <SectionLabel label="Plan" />
             <div className="divide-y divide-[#CED6DE]">
-              <div className="flex items-center gap-3 py-3">
-                <ShieldIcon />
-                <span className="flex-1 text-sm font-medium text-[#3B6AE8]">
-                  Cam Unlimited
+              <div className="flex items-center gap-0.5 py-3">
+                <img src={Unlimited} alt="Unlimited" className="w-9 h-9" />
+                <span className="flex-1 text-base font-semibold text-[#4E2FD2]">
+                  <span className="text-black">Cam</span> Unlimited
                 </span>
                 <div className="text-right min-w-[64px]">
-                  <p className="text-xs text-[#1F1F1FBF] line-through leading-none mb-0.5">
+                  <p className="text-sm text-[#6F7882] line-through font-semibold leading-none mb-0.5">
                     $12.99/mo
                   </p>
-                  <p className="text-sm font-semibold leading-none text-[#3B6AE8]">
+                  <p className="text-sm font-semibold leading-none text-[#4E2FD2]">
                     $9.99/mo
                   </p>
                 </div>
               </div>
 
               <PlanItem
-                icon={<TruckIcon />}
+                icon={TruckIcon}
                 name="Fast Shipping"
                 originalPrice="$5.99"
                 discountedPrice="FREE"
                 priceColorClass="text-[#1F1F1F]"
               />
             </div>
+          </div>
+
+          {/* SAVE */}
+          <div className="flex justify-between items-center">
+            <div className="h-[78px] w-[78px]">
+              <img
+                src={Badge}
+                alt="Badge"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="bg-[#4E2FD2] py-[5px] px-2 rounded-[3px] font-medium text-xs mx-auto text-white">
+                as low as $19.19/mo
+              </div>
+
+              <div className="flex items-center gap-2">
+                <h5 className="text-[#6F7882] text-lg font-medium">$238.81</h5>
+                <h5 className="font-semibold text-2xl text-[#4E2FD2]">
+                  $187.89
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 pt-2">
+            <p className="text-[#0AA288] text-xs font-semibold text-center">
+              Congrats! You’re saving $50.92 on your security bundle!
+            </p>
+
+            <button className="bg-[#4E2FD2] hover:bg-[#3614c0] duration-300 transition-colors font-semibold text-lg rounded-sm text-white h-[48px] w-full">
+              Checkout
+            </button>
+
+            <button className="underline text-[#484848] text-sm font-normal text-center italic hover:text-[#4E2FD2] transition-colors duration-300">
+              Save my system for later
+            </button>
           </div>
         </div>
       </div>

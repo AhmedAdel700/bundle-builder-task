@@ -1,4 +1,3 @@
-import "./App.css";
 import BundleBuilder from "./pages/BundleBuilder";
 
 function App() {

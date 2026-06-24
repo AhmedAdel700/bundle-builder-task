@@ -4,7 +4,7 @@ interface SectionLabelProps {
 
 export default function SectionLabel({ label }: SectionLabelProps) {
   return (
-    <p className="uppercase text-[10px] font-semibold text-[#484848] tracking-wide pt-3 pb-1">
+    <p className="uppercase text-xs font-normal text-[#A8B2BD] tracking-wide pt-3">
       {label}
     </p>
   );
