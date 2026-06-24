@@ -4,14 +4,14 @@
     "name": "Wyze Cam v4",
     "description": "The clearest Wyze Cam ever made.",
     "learnMoreUrl": "#",
-    "image": "/assets/WyzeCamv4-white.svg",
+    "image": "/assets/camera.png",
     "discount": 22,
     "originalPrice": 35.98,
     "salePrice": 27.98,
     "quantity": 0,
     "colorOptions": [
-      { "label": "White", "image": "/assets/WyzeCamv4-white.svg" },
-      { "label": "Grey", "image": "/assets/WyzeCamv4-grey.svg" },
+      { "label": "White", "image": "/assets/camera.png" },
+      { "label": "Grey", "image": "/assets/WyzeCamv4-grey.png" },
       { "label": "Black", "image": "/assets/WyzeCamv4-black.svg" }
     ],
     "selectedColor": "White"
@@ -72,7 +72,8 @@
     "salePrice": 89.98,
     "quantity": 0,
     "colorOptions": [
-      { "label": "White", "image": "/assets/WyzeBatteryCamPro.svg" }
+      { "label": "White", "image": "/assets/WyzeBatteryCamPro.svg" },
+      { "label": "Black", "image": "/assets/WyzeBatteryCamPro-black.png" }
     ],
     "selectedColor": "White"
   }

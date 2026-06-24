@@ -23,7 +23,6 @@ export default function ProductItem({
 }: ProductItemProps) {
   return (
     <div className="flex items-center gap-3 py-3">
-      {/* Product image */}
       <div className="w-[41px] h-[41px] shrink-0 bg-white rounded-[5px] flex items-center justify-center">
         <img
           src={image}
@@ -32,12 +31,10 @@ export default function ProductItem({
         />
       </div>
 
-      {/* Name */}
       <span className="flex-1 text-sm text-[#0B0D10] font-medium leading-[130%]">
         {name}
       </span>
 
-      {/* Quantity controls */}
       <div className="flex items-center gap-2">
         <button
           onClick={onDecrement}
@@ -56,7 +53,6 @@ export default function ProductItem({
         </button>
       </div>
 
-      {/* Price */}
       <div className="text-right ml-2 min-w-[56px]">
         {originalPrice && (
           <p className="text-sm text-[#6F7882] line-through font-medium leading-none mb-0.5">

@@ -17,17 +17,14 @@ export default function PlanItem({
 }: PlanItemProps) {
   return (
     <div className="flex items-center gap-3 py-3">
-      {/* Icon */}
       <div className="w-[41px] h-[41px] shrink-0 rounded-[5px] flex items-center justify-center bg-white">
         <img src={icon} alt="icon" className="w-[29px] h-[29px]" />
       </div>
 
-      {/* Name */}
       <span className={`flex-1 text-sm font-semibold ${nameColorClass}`}>
         {name}
       </span>
 
-      {/* Price */}
       <div className="text-right min-w-[64px]">
         <p className="text-sm text-[#6F7882] line-through font-semibold leading-none mb-0.5">
           {originalPrice}
